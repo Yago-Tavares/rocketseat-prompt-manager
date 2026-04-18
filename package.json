@@ -8,7 +8,7 @@
     "start": "next start",
     "format": "prettier --write",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit --skipLiCheck",
+    "typecheck": "tsc --noEmit --skipLibCheck",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@prisma/client": "^6.19.3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
     "@types/node": "^20",
     "@types/pg": "^8.20.0",
     "@types/react": "^19.2.14",
