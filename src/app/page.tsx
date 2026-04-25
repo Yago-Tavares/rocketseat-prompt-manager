@@ -1,10 +1,14 @@
-import Image from 'next/image';
-
 export default function Home() {
-  const teste = 'teste';
   return (
-    <div>
-      <h2>Rocketseat</h2>
-    </div>
+    <section className="flex min-h-full">
+      <div className="flex flex-1 items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Selecione um prompt</h1>
+          <p className="text-gray-400">
+            Escolha um prompt na barra lateral para começar
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
