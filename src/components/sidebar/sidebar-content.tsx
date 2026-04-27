@@ -6,19 +6,36 @@ import {
   ArrowRightToLine,
   X as CloseButton,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Logo } from '../logo/logo';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { PromptSummary } from '@/core/domain/prompts/prompt.entity';
+import { PromptList } from '../prompts/prompt-list';
 
-export const SidebarContent = () => {
+export interface SideBarProps {
+  prompts: PromptSummary[];
+}
+
+export const SidebarContent = ({ prompts }: SideBarProps) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('q') ?? '');
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const collapsedSidebar = () => setIsCollapsed(true);
   const expandSidebar = () => setIsCollapsed(false);
 
   const handleNewPrompt = () => router.push('/new');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setSearch(value);
+
+    const url = value ? `/?q=${encodeURIComponent(value)}` : '/';
+    router.push(url, { scroll: false });
+  };
 
   return (
     <aside
@@ -37,6 +54,15 @@ export const SidebarContent = () => {
               <ArrowRightToLine className="w-5 h-5 text-gray-100" />
             </Button>
           </header>
+          <div className="flex flex-col items-center space-y-4">
+            <Button
+              onClick={handleNewPrompt}
+              aria-label="Novo prompt"
+              title="Novo prompt"
+            >
+              <AddIcon className="w-5 h-5 text-white" />
+            </Button>
+          </div>
         </section>
       )}
 
@@ -69,6 +95,19 @@ export const SidebarContent = () => {
               </header>
             </div>
 
+            <section className="mb-5 ">
+              <form action="">
+                <Input
+                  name="q"
+                  type="text"
+                  value={search}
+                  placeholder="Buscar por título ..."
+                  onChange={handleInputChange}
+                  autoFocus
+                />
+              </form>
+            </section>
+
             <div>
               <Button onClick={handleNewPrompt} className="w-full" size="lg">
                 <AddIcon className="w-5 h-5 mr-2" />
@@ -76,6 +115,12 @@ export const SidebarContent = () => {
               </Button>
             </div>
           </section>
+          <nav
+            className="flex-1 overflow-auto px-6 pb-6"
+            aria-label="Lista de prompts"
+          >
+            <PromptList prompts={prompts} />
+          </nav>
         </>
       )}
     </aside>
