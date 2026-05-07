@@ -33,10 +33,10 @@ export const SidebarContent = ({ prompts }: SideBarProps) => {
   const [search, setSearch] = useState(searchParams.get('q') ?? '');
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-    const hasQuery = search.trim().length > 0;
+  const hasQuery = search.trim().length > 0;
 
   useEffect(() => {
-    if(!hasQuery) return;
+    if (!hasQuery) return;
 
     formRef.current?.requestSubmit();
   }, [searchParams]);
