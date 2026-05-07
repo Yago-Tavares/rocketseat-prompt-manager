@@ -92,6 +92,28 @@ describe('SidebarContent', () => {
       expect(expandButton).not.toBeInTheDocument();
     });
 
+    it('deveria reexpandir ao clicar no botão de expandir', async () => {
+      makeSut();
+
+        const colapseButton = screen.getByRole('button', {
+          name: /minimizar sidebar/i,
+        });
+
+      await user.click(colapseButton);
+
+      const expandButton = screen.getByRole('button', {
+        name: /expandir sidebar/i,
+      });
+
+      await user.click(expandButton);
+
+      expect(expandButton).not.toBeVisible();
+      expect(screen.getByRole('button', {name: /minimizar sidebar/i,})).toBeVisible();
+      expect(screen.getByRole('navigation', { name: 'Lista de prompts' })).toBeVisible();
+
+
+    });
+
     it('deveria colapsar ao clicar no botão de minimizar', async () => {
       makeSut();
 
@@ -176,6 +198,16 @@ describe('SidebarContent', () => {
       const lastClearCall = pushMock.mock.calls.at(-1);
       expect(lastClearCall?.[0]).toBe('/');
     });
+  });
+
+  it('deveria submeter automaticamente ao iniciar com search param', () => {
+    const submitSpy = jest.spyOn(HTMLFormElement.prototype, 'requestSubmit').mockImplementation(() => undefined);
+    const inicialText = 'Texto';
+    mockSearchParams = new URLSearchParams(`q=${inicialText}`);
+    makeSut();
+
+    expect(submitSpy).toHaveBeenCalled();
+    submitSpy.mockRestore();
   });
 
   it('Deveria iniciar o campo de busca com o search param', () => {

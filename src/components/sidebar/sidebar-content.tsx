@@ -7,7 +7,7 @@ import {
   X as CloseButton,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useActionState, useRef, useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { Logo } from '../logo/logo';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -32,6 +32,14 @@ export const SidebarContent = ({ prompts }: SideBarProps) => {
   const searchParams = useSearchParams();
   const [search, setSearch] = useState(searchParams.get('q') ?? '');
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+    const hasQuery = search.trim().length > 0;
+
+  useEffect(() => {
+    if(!hasQuery) return;
+
+    formRef.current?.requestSubmit();
+  }, [searchParams]);
 
   const collapsedSidebar = () => setIsCollapsed(true);
   const expandSidebar = () => setIsCollapsed(false);
